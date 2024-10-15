@@ -15,14 +15,6 @@ Autorización, mediante la creación de áreas privadas en las que los usuarios 
 - Diego Cabrera Carrasco  [@diegocab27](https://www.github.com/diegocab27)
 
 
-
-## Despliegue
-
-La aplicacion se desplego en https://render.com y se puede revisar a travez del siguiente enlace
-
-- https://proyecto-6-s41a.onrender.com
-
-
 ## Puntos a destacar
 
 - Uso de  `Node.js` y `Express` para el desarrollo del servidor.

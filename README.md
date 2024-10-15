@@ -43,18 +43,6 @@ La aplicacion se desplego en https://render.com y se puede revisar a travez del 
 
 ## Implementacion del Frontend:
 
-
-- 1.Creacion de modelos user y product con mongoose
-
-- 2.Creacion controladores para los usuarios con encriptacion JWT y controlador de productos con modelo CRUD.
-
-- 3.Creacion Midleware para la autorizacion de acceso
-
-- 4.Creacion Rutas para la operaciones de usuario y productos.
-
-
-## Implementacion del Backend:
-
 - 1.Instalacion de los elementes de react y las dependencias
 
 - 2.Aplicacion de las diferentes paginas a utilizar y la comunicacion con el Backend

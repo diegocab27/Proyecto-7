@@ -9,7 +9,7 @@ createCart = async (req, res) => {
         
       const newCartData = { ...req.body, userId: userID,products: []};
   
-      // Crea un nuevo carrito con los datos actualizados
+      
       const newCart = await Cart.create(newCartData);
   
       res.json({message:"carrito creado", cart: newCart });
@@ -52,42 +52,37 @@ createCart = async (req, res) => {
     }
   };
 
-  editCart = async (req, res) => {
+  const editCart = async (req, res) => {
     try {
-      
-      const userID = req.user.id;
-  
-     
-      const foundCart = await Cart.findOne({ userId: userID }).sort({ createdAt: -1 });
-      console.log(foundCart)
-      
-      if (!foundCart) {
-        return res.status(404).json({ msg: "Carrito no encontrado" });
-      }
-  
-      
-      const { cart } = req.body
+        
+        const userID = req.user.id;
 
-      if (!cart || cart.length === 0) {
-        return res.status(400).json({ msg: "El carrito está vacío" });
-    }
-  
-      
-      foundCart.products.push({...cart}); 
-  
-     
-      await foundCart.save();
-  
-      
-      res.json({
-        msg: "Tu carrito fue actualizado",
-        updatedCart: foundCart,
-      });
+       
+        const foundCart = await Cart.findOne({ userId: userID }).sort({ createdAt: -1 });
+
+        if (!foundCart) {
+            return res.status(404).json({ msg: "Carrito no encontrado" });
+        }
+
+        
+        const { name, price } = req.body;
+
+       
+        foundCart.products.push({ name, price }); 
+
+        
+        await foundCart.save();
+
+        
+        res.json({
+            msg: "Tu carrito fue actualizado",
+            updatedCart: foundCart,
+        });
     } catch (error) {
-      res.status(500).json({ msg: "Error al actualizar el carrito", error });
-      console.log(error)
+        res.status(500).json({ msg: "Error al actualizar el carrito", error });
+        console.log(error);
     }
-  };
+};
 
 module.exports = {createCart,getCart,editCart};
 

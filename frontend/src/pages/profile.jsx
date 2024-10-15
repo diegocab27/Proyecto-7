@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const Profile = () => {
     const navigate = useNavigate();
     const [products, setProducts] = useState([]);
-    const [totalProducts, settotalProducts] = useState([]); // Estado para manejar el carrito
+    const [totalProducts, setTotalProducts] = useState([]); // Estado para manejar el carrito
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -12,6 +12,29 @@ const Profile = () => {
             navigate('/login');
         }
     }, [navigate]);
+
+    // Mueve la función fetchCart aquí
+    const fetchCart = async () => {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch('http://localhost:3000/api/cart/get-cart', { // Cambia esto a tu endpoint de obtener carrito
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al obtener el carrito');
+            }
+
+            const { cart } = await response.json();
+            setTotalProducts(cart.products); // Asumiendo que `cart.products` contiene el array de productos
+        } catch (error) {
+            console.error('Error fetching cart:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -33,41 +56,37 @@ const Profile = () => {
         };
 
         fetchProducts();
+        fetchCart(); // Llama a la función para obtener el carrito
     }, []);
 
-    const addToCart = (name, price) => {
+    const addToCart = async (name, price) => {
         const product = { name, price };
     
-        // Cambiar la forma en que se actualiza el carrito para asegurarte de que no haya arrays anidados
-        settotalProducts((prevCart) => {
-            // Asegúrate de que cada producto se agregue correctamente
-            const updatedCart = [...prevCart, product]; 
-            console.log('Carrito actualizado:', updatedCart);
-            return updatedCart; // Devuelve el nuevo carrito sin anidamiento
-        });
-    };
-    
-
-    const handleCheckout = async () => {
         try {
             const token = localStorage.getItem('token');
-            console.log('Total Products antes de enviar:', totalProducts); // Verifica el contenido aquí
-    
             const response = await fetch('http://localhost:3000/api/cart/edit-cart', {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                body: JSON.stringify({ cart: totalProducts }), // Envía el carrito completo al backend
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ name: product.name, price: product.price }), // Envía el producto directamente
             });
     
             if (!response.ok) {
-                throw new Error('Error al enviar el carrito');
+                throw new Error('Error al agregar el producto al carrito');
             }
     
-            console.log('Carrito enviado correctamente');
-            navigate('/checkout');
+            console.log('Producto agregado al carrito:', product);
+            // Re-fetch the cart to update the displayed cart items
+            await fetchCart(); // Asegúrate de esperar a que se complete
         } catch (error) {
-            console.error('Error al enviar el carrito:', error);
+            console.error('Error al agregar el producto:', error);
         }
+    };
+
+    const handleCheckout = async () => {
+        navigate('/checkout');
     };
     
     const name = localStorage.getItem('name') || 'Usuario';

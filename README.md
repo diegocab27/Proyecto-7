@@ -43,7 +43,7 @@ La aplicacion se desplego en https://render.com y se puede revisar a travez del 
 
 ## Implementacion del Frontend:
 
-- 1.Instalacion de los elementes de react y las dependencias
+- 1.Instalacion de los elementos de react y las dependencias
 
 - 2.Aplicacion de las diferentes paginas a utilizar y la comunicacion con el Backend
 
